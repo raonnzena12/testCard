@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+	<resultMap type="MemberVo" id="memberRS">
+		<id property="memNo" column="MEM_NO"/>
+		<result property="memKname" column="MEM_KNAME" />
+		<result property="memEname" column="MEM_ENAME" />
+		<result property="memBirth" column="MEM_BIRTH" />
+		<result property="memHaddress" column="MEM_HADDRESS" />
+		<result property="memHphone" column="MEM_HPHONE" />
+		<result property="memCphone" column="MEM_CPHONE" />
+		<result property="memSphone" column="MEM_SPHONE" />
+		<result property="memEmail" column="MEM_EMAIL" />
+		<result property="memSmsCode" column="MEM_SMSCODE" />
+		<result property="memBankCode" column="MEM_BANKCODE" />
+		<result property="memAccount" column="MEM_ACCOUNT" />
+		<result property="memLimit" column="MEM_LIMIT" />
+		<result property="memBillCode" column="MEM_BILLCODE" />
+		<result property="memRegDate" column="MEM_REGDATE" />
+		<result property="memSecDate" column="MEM_SECDATE" />
+		<result property="memStatus" column="MEM_STATUS" />
+		<result property="memWname" column="MEM_WNAME" />
+		<result property="memDept" column="MEM_DEPT" />
+		<result property="memJobposition" column="MEM_JOBP" />
+		<result property="memFamily" column="FAM_POSITION" />
+		<collection property="memAddr" column="MEM_NO" javaType="java.util.ArrayList" ofType="AddressVo" select="addressListSelect"></collection>
+	</resultMap>
+	
+	<resultMap type="AddressVo" id="addressRS">
+		<id property="memNo" column="MEM_NO" />
+		<result property="addrCode" column="BILL_CODE" />
+		<result property="address" column="BILL_ADDR" />
+		<result property="addrPhone" column="BILL_PHONE" />
+		<result property="addrPost1" column="BILL_POST1" />
+		<result property="addrPost2" column="BILL_POST2" />
+	</resultMap>
+	
+	<resultMap type="CardVo" id="cardRS">
+		<id property="cardNo" column="CARD_NO" />
+		<result property="cardName" column="CARD_NAME" />
+		<result property="cardServiceCode" column="CARD_SERVICE_CODE" />
+		<result property="cardServiceName" column="CARD_SERVICE_NAME" />
+		<result property="cardDesignCode" column="CARD_DESIGN_CODE" />
+		<result property="cardDesignName" column="CARD_DESIGN_NAME" />
+		<result property="cardBrandCode" column="CARD_BRAND_CODE" />
+		<result property="cardBrandName" column="CARD_BRAND_NAME" />
+		<result property="cardOverseas" column="CARD_OVERSEAS" />
+		<result property="memNo" column="CARD_MEM_NO" />
+		<result property="cardStatusCode" column="CARD_STATUS_CODE" />
+		<result property="cardStatusName" column="CARD_STATUS_NAME" />
+		<result property="cardAdditional1" column="CARD_ADD1" />
+		<result property="cardAdditional2" column="CARD_ADD2" />
+	</resultMap>
+	
+	<resultMap type="ModifyLogVo" id="modifylogRS">
+		<id property="logNo" column="LOG_NO" />
+		<result property="logTBCode" column="LOG_TBCODE" />
+		<result property="logModiCol" column="LOG_MODICOL" />
+		<result property="logBefore" column="LOG_BEFORE" />
+		<result property="logAfter" column="LOG_AFTER" />
+		<result property="logRowId" column="LOG_ROWID" />
+		<result property="logModiDate" column="LOG_MODIDATE" />
+		<result property="logMemNo" column="LOG_MEM_NO" />
+	</resultMap>
+	
+	<!-- 멤버 정보 INSERT 하는 쿼리 -->
+	<insert id="insertMember" parameterType="MemberVo">
+		INSERT INTO MEMBER VALUES(
+			#{ memNo }
+			,#{ memKname }
+			,#{ memEname }
+			,#{ memBirth }
+			,#{ memCphone }
+			,#{ memSphone }
+			,#{ memEmail }
+			,#{ memSmsCode }
+			,#{ memBankCode }
+			,#{ memAccount }
+			,#{ memLimit }
+			,#{ memBillCode }
+			,SYSDATE
+			,NULL
+			,'MS001'
+			,#{ memWname }
+			,#{ memDept }
+			,#{ memJobposition }
+		)
+	</insert>
+	
+	<!-- 멤버 SEQUENCE 받아오는 쿼리 -->
+	<select id="selectMemberSequence" resultType="_int">
+		SELECT SEQ_MEM.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	<!-- 카드 SEQUENCE 받아오는 쿼리 -->
+	<select id="selectCardSequence" resultType="_int">
+		SELECT SEQ_CRD.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	<!-- 카드 정보 INSERT 하는 쿼리 -->
+	<insert id="insertCard" parameterType="CardVo">
+		INSERT INTO CARD VALUES(
+			#{ cardNo }
+			,#{ cardName }
+			,#{ cardServiceCode }
+			,#{ cardDesignCode }
+			,#{ cardBrandCode }
+			,#{ cardOverseas }
+			,#{ memNo }
+			,'CC001'
+			,SYSDATE
+			,NULL
+		<choose>
+			<when test="cardAdditional1 != null">,'Y'</when>
+			<otherwise>,DEFAULT</otherwise>
+		</choose>
+		<choose>
+			<when test="cardAdditional2 != null">,'Y'</when>
+			<otherwise>,DEFAULT</otherwise>
+		</choose>
+		)
+	</insert>
+	
+	<!-- 주소지 INSERT 하는 쿼리 -->
+	<insert id="insertAddress" parameterType="AddressVo">
+		INSERT INTO BILL_ADDR VALUES (
+			#{ memNo }
+			,#{ addrCode }
+			,#{ address }
+			,#{ addrPhone }
+			,#{ addrPost1 }
+			,#{ addrPost2 }
+		)
+	</insert>
+	
+	<!-- 멤버번호&생년월일로 유저 SELECT 하는 쿼리 -->
+	<select id="selectMember" parameterType="MemberVo" resultMap="memberRS">
+		SELECT * FROM MEMBER
+		WHERE MEM_NO = #{ memNo }
+		AND MEM_BIRTH = #{ memBirth }
+	</select>
+	
+	<!-- 개인정보 조회&수정용으로 멤버번호로 멤버 SELECT 하는 쿼리 -->
+	<select id="selectMember2" parameterType="string" resultMap="memberRS">
+		SELECT MEM_NO, MEM_KNAME, MEM_ENAME, MEM_BIRTH, MEM_CPHONE, MEM_EMAIL, A.CODE_NAME as "MEM_SMSCODE", B.CODE_NAME as "MEM_BANKCODE", MEM_ACCOUNT, MEM_LIMIT, C.CODE_NAME as "MEM_BILLCODE", MEM_REGDATE, MEM_SECDATE, MEM_STATUS, MEM_WNAME, MEM_DEPT, MEM_JOBP
+		FROM MEMBER M
+		JOIN CODE A ON ( M.MEM_SMSCODE = A.CODE_NO )
+		JOIN CODE B ON ( M.MEM_BANKCODE = B.CODE_NO )
+		JOIN CODE C ON ( M.MEM_BILLCODE = C.CODE_NO )
+		WHERE M.MEM_NO = #{ memNo }
+	</select>
+	
+	<!-- 멤버 번호로 해당 멤버의 주소 리스트 반환하는 쿼리 -->
+	<select id="addressListSelect" parameterType="string" resultMap="addressRS">
+		SELECT * 
+		FROM BILL_ADDR
+		WHERE MEM_NO = #{ memNo }
+	</select>
+	
+	<!-- 멤버 정보수정하는 쿼리 -->
+	<update id="updateMemberInfo" parameterType="MemberVo">
+		UPDATE MEMBER
+		SET
+			MEM_KNAME = #{ memKname }
+			,MEM_ENAME = #{ memEname }
+			,MEM_BIRTH = #{ memBirth }
+			,MEM_CPHONE = #{ memCphone }
+			,MEM_SPHONE = #{ memSphone }
+			,MEM_EMAIL = #{ memEmail }
+			,MEM_SMSCODE = #{ memSmsCode }
+			,MEM_BANKCODE = #{ memBankCode }
+			,MEM_ACCOUNT = #{ memAccount }
+			,MEM_LIMIT = #{ memLimit }
+			,MEM_BILLCODE = #{ memBillCode }
+			,MEM_WNAME = #{ memWname }
+			,MEM_DEPT = #{ memDept }
+			,MEM_JOBP = #{ memJobposition }
+		WHERE
+			MEM_NO = #{ memNo }
+	</update>
+	
+	<!-- 멤버의 주소정보 UPDATE 혹은 INSERT 하는 쿼리 -->
+	<!-- MERGE INTO를 써서 단번에 처리해봅시마쇼 ㅇㅂㅇ)9 -->
+	<update id="updateMemberAddr" parameterType="AddressVo">
+		MERGE INTO BILL_ADDR B
+		USING DUAL
+			ON (B.MEM_NO = #{ memNo } AND B.BILL_CODE = #{ addrCode })
+		WHEN MATCHED THEN
+			UPDATE SET
+				BILL_ADDR = #{ address }
+				,BILL_PHONE = #{ addrPhone }
+				,BILL_POST1 = #{ addrPost1 }
+				,BILL_POST2 = #{ addrPost2 }
+		WHEN NOT MATCHED THEN
+			INSERT VALUES (
+				#{ memNo }
+				,#{ addrCode }
+				,#{ address }
+				,#{ addrPhone }
+				,#{ addrPost1 }
+				,#{ addrPost2 }
+			)
+	</update>
+	
+	<!-- 멤버 카드정보 리스트 받아오는 쿼리 -->
+	<select id="selectCardList" parameterType="string" resultMap="cardRS">
+		SELECT C.CARD_NO, C.CARD_NAME, C.CARD_SERVICE_CODE, C1.CODE_NAME AS "CARD_SERVICE_NAME", C.CARD_DESIGN_CODE, C2.CODE_NAME AS "CARD_DESIGN_NAME", C.CARD_BRAND_CODE, C3.CODE_NAME AS "CARD_BRAND_NAME", C.CARD_OVERSEAS, C.CARD_MEM_NO, C.CARD_STATUS_CODE , C4.CODE_NAME AS "CARD_STATUS_NAME" , C.CARD_ADD1, C.CARD_ADD2
+		FROM CARD C
+		JOIN CODE C1 ON ( C.CARD_SERVICE_CODE = C1.CODE_NO )
+		JOIN CODE C2 ON ( C.CARD_DESIGN_CODE = C2.CODE_NO )
+		JOIN CODE C3 ON ( C.CARD_BRAND_CODE = C3.CODE_NO )
+		JOIN CODE C4 ON ( C.CARD_STATUS_CODE = C4.CODE_NO )
+		WHERE CARD_MEM_NO = #{ memNo }
+	</select>
+	
+	<!-- 카드정보 한건 받아오는 쿼리 -->
+	<select id="selectCard" parameterType="string" resultMap="cardRS">
+		SELECT C.CARD_NO, C.CARD_NAME, C.CARD_SERVICE_CODE, C1.CODE_NAME AS "CARD_SERVICE_NAME", C.CARD_DESIGN_CODE, C2.CODE_NAME AS "CARD_DESIGN_NAME", C.CARD_BRAND_CODE, C3.CODE_NAME AS "CARD_BRAND_NAME", C.CARD_OVERSEAS, C.CARD_MEM_NO, C.CARD_STATUS_CODE , C4.CODE_NAME AS "CARD_STATUS_NAME" , C.CARD_ADD1, C.CARD_ADD2
+		FROM CARD C
+		JOIN CODE C1 ON ( C.CARD_SERVICE_CODE = C1.CODE_NO )
+		JOIN CODE C2 ON ( C.CARD_DESIGN_CODE = C2.CODE_NO )
+		JOIN CODE C3 ON ( C.CARD_BRAND_CODE = C3.CODE_NO )
+		JOIN CODE C4 ON ( C.CARD_STATUS_CODE = C4.CODE_NO )
+		WHERE CARD_NO = #{ cardNo }
+	</select>
+	
+	<!-- 카드정보 UPDATE 하는 쿼리 -->
+	<update id="updateCard" parameterType="CardVo">
+		UPDATE CARD
+		SET
+			CARD_NAME = #{ cardName }
+			,CARD_SERVICE_CODE = #{ cardServiceCode }
+			,CARD_DESIGN_CODE = #{ cardDesignCode }
+			,CARD_BRAND_CODE = #{ cardBrandCode }
+			,CARD_OVERSEAS = #{ cardOverseas }
+			,CARD_ADD1 = #{ cardAdditional1 }
+			,CARD_ADD2 = #{ cardAdditional2 }
+		WHERE 
+			CARD_NO = #{ cardNo }
+	</update>
+	
+	<!-- 가족회원LIST 가져오는 쿼리 -->
+	<select id="selectFamilyList" parameterType="string" resultMap="memberRS">
+		SELECT M.*, ( SELECT FAM_COMMENTS FROM FAMILY F WHERE F.FAM_MEM_NO2 = M.MEM_NO ) AS "FAM_POSITION"
+		FROM MEMBER M
+		WHERE MEM_NO IN ( 
+			SELECT FAM_MEM_NO2 
+			FROM FAMILY 
+			WHERE FAM_MEM_NO = #{ memNo }
+		)
+	</select>
+	
+	<!-- 가족회원 등록하는 프로시저 쿼리 -->
+	<insert id="insertFamilyMember" parameterType="MemberVo">
+		{call
+			DECLARE
+			BEGIN
+				INSERT INTO FAMILY VALUES (#{ memFamily }, #{ memNo }, #{ memFRe });
+				INSERT INTO FAMILY VALUES (#{ memNo }, #{ memFamily }, NULL);
+			END
+		}
+	</insert>
+	
+	<!-- 가족회원정보 수정하는 쿼리 -->
+	<update id="updateFamily" parameterType="MemberVo">
+		UPDATE MEMBER
+		SET
+			MEM_KNAME = #{ memKname }
+			,MEM_ENAME = #{ memEname }
+			,MEM_BIRTH = #{ memBirth }
+			,MEM_LIMIT = #{ memLimit }
+		WHERE
+			MEM_NO = #{ memNo }
+	</update>
+	
+	<!-- 가족관계정보 수정하는 쿼리 -->
+	<update id="updateFamilyRelationship" parameterType="MemberVo">
+		UPDATE FAMILY
+		SET 
+			FAM_COMMENTS = #{ memFRe }
+		WHERE
+			FAM_MEM_NO = #{ memFamily } 
+			AND FAM_MEM_NO2 = #{ memNo }
+	</update>
+	
+	<!-- 정보수정 로그 가져오는 쿼리 -->
+	<select id="selectModifyLogList" parameterType="string" resultMap="modifylogRS">
+		SELECT *
+		FROM LOGTB
+		WHERE LOG_MEM_NO = #{ memNo }
+	</select>
+</mapper>
