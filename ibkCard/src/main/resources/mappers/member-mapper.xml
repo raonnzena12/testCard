@@ -291,4 +291,9 @@
 		FROM LOGTB
 		WHERE LOG_MEM_NO = #{ memNo }
 	</select>
+	
+	<select id="selectJqGridList" resultMap="memberRS">
+		SELECT *
+		FROM MEMBER
+	</select>
 </mapper>

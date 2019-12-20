@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ibk.card.member.vo.AddressVo;
 import com.ibk.card.member.vo.CardVo;
+import com.ibk.card.member.vo.JqgridVo;
 import com.ibk.card.member.vo.MemberVo;
 import com.ibk.card.member.vo.ModifyLogVo;
 
@@ -100,5 +101,10 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public List<ModifyLogVo> selectModifyLogList(String memNo) {
 		return sqlSession.selectList("memberMapper.selectModifyLogList", memNo);
+	}
+
+	@Override
+	public List<MemberVo> selectJqGridList(JqgridVo jq) {
+		return sqlSession.selectList("memberMapper.selectJqGridList");
 	}
 }

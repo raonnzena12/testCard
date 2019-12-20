@@ -10,6 +10,7 @@
 		<typeAlias type="com.ibk.card.member.vo.CardVo" alias="CardVo" />
 		<typeAlias type="com.ibk.card.member.vo.AddressVo" alias="AddressVo" />
 		<typeAlias type="com.ibk.card.member.vo.ModifyLogVo" alias="ModifyLogVo" />
+		<typeAlias type="com.ibk.card.member.vo.JqgridVo" alias="JqgridVo" />
 	</typeAliases>
 	
 	<mappers>

@@ -1,8 +1,11 @@
 package com.ibk.card.member.controller;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.ibk.card.member.service.MemberService;
 import com.ibk.card.member.vo.AddressList;
 import com.ibk.card.member.vo.CardVo;
+import com.ibk.card.member.vo.JqgridVo;
 import com.ibk.card.member.vo.MemberFamVo;
 import com.ibk.card.member.vo.MemberList;
 import com.ibk.card.member.vo.MemberVo;
@@ -25,6 +30,23 @@ import com.ibk.card.member.vo.ModifyLogVo;
 public class MemberController {
 	@Autowired
 	private MemberService memService;
+	
+	@RequestMapping("jqGrid")
+	public String jqGridTest() {
+		return "jqGrid";
+	}
+	
+	@ResponseBody
+	@RequestMapping("jqgridStart")
+	public List<MemberVo> jqGridStard(HttpServletResponse response, JqgridVo jq, Model model) {
+		System.out.println("enter jqgridStart");
+		PrintWriter out = null;
+		response.setCharacterEncoding("UTF-8");
+		
+		List<MemberVo> testList = memService.selectJqGridList(jq);
+		
+		return testList;
+	}
 	
 	@RequestMapping("member/join/form")
 	public String memberRegView() {

@@ -15,6 +15,7 @@ import com.ibk.card.member.dao.MemberDao;
 import com.ibk.card.member.vo.AddressList;
 import com.ibk.card.member.vo.AddressVo;
 import com.ibk.card.member.vo.CardVo;
+import com.ibk.card.member.vo.JqgridVo;
 import com.ibk.card.member.vo.MemberFamVo;
 import com.ibk.card.member.vo.MemberVo;
 import com.ibk.card.member.vo.ModifyLogVo;
@@ -193,5 +194,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<ModifyLogVo> selectModifyLogList(String memNo) {
 		return memDao.selectModifyLogList(memNo);
+	}
+
+	@Override
+	public List<MemberVo> selectJqGridList(JqgridVo jq) {
+		return memDao.selectJqGridList(jq);
 	}
 }

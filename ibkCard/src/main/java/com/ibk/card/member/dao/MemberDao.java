@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ibk.card.member.vo.AddressVo;
 import com.ibk.card.member.vo.CardVo;
+import com.ibk.card.member.vo.JqgridVo;
 import com.ibk.card.member.vo.MemberFamVo;
 import com.ibk.card.member.vo.MemberVo;
 import com.ibk.card.member.vo.ModifyLogVo;
@@ -127,5 +128,7 @@ public interface MemberDao {
 	 * @return mList
 	 */
 	public abstract List<ModifyLogVo> selectModifyLogList(String memNo);
+
+	public abstract List<MemberVo> selectJqGridList(JqgridVo jq);
 
 }

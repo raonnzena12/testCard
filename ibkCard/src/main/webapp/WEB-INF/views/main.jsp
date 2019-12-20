@@ -18,7 +18,7 @@ $j(document).ready(function(){
 		$j("#test_modal").modal();
 	});
 	$j("#mybtn2").on("click",function(){
-
+		location.href='jqGrid'
 	});
 	$j("#mybtn3").on("click",function(){
 		location.href='member/join/form';
@@ -53,7 +53,7 @@ $j(document).ready(function(){
 		<tr>
 			<td>
 				<input id="mybtn1" type="button" value="고객번호로그인" >
-				<input id="mybtn1" type="button" value="생년월일로그인" >
+				<input id="mybtn2" type="button" value="생년월일로그인" >
 				<input id="mybtn3" type="button" value="카드신청" >
 			</td>
 		</tr>

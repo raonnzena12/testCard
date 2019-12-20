@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 
 import com.ibk.card.member.vo.AddressList;
 import com.ibk.card.member.vo.CardVo;
+import com.ibk.card.member.vo.JqgridVo;
 import com.ibk.card.member.vo.MemberFamVo;
 import com.ibk.card.member.vo.MemberVo;
 import com.ibk.card.member.vo.ModifyLogVo;
@@ -98,5 +99,7 @@ public interface MemberService {
 	 * @return mList
 	 */
 	public abstract List<ModifyLogVo> selectModifyLogList(String memNo);
+
+	public abstract List<MemberVo> selectJqGridList(JqgridVo jq);
 
 }
